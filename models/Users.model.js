@@ -29,6 +29,8 @@ const Users = db.define( 'Users' ,{
     defaultValue: true,
     type: DataTypes.BOOLEAN
   }
+},{
+  timestamps:false
 })
 
 module.exports = Users

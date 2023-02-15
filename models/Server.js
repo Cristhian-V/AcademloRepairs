@@ -3,17 +3,29 @@ const cors = require('cors')
 const { db } = require('../database/config')
 const { globalErrorHandler } = require('../controllers/error.controller')
 const { AppError } = require('../utils/appError')
+const { usersRouter } = require('../routes/users.route')
+const initModel = require('./init.model')
+const { repairsRouter } = require('../routes/repairs.route')
 
 class Server {
   constructor(){
     this.app = express()
     this.port = process.env.PORT
 
-    this.routes()
+    this.path = {
+      users:'/api/v1/users',
+      repairs:'/api/v1/repairs'
+    }
+
+    
+    this.middlewares()
     this.database()
+    this.routes()
   }
 
   routes(){
+    this.app.use(this.path.users, usersRouter)
+    this.app.use(this.path.repairs, repairsRouter)
 
     this.app.all('*', (req, res, next) =>{
       return next(
@@ -34,8 +46,11 @@ class Server {
       .then(()=>console.log('autenticacion exitosa'))
       .catch(err=>console.log(err))
 
+    initModel()
+
     db.sync()
       .then(()=> console.log('sincronizadion exitosa'))
+      .catch(err=>console.log(err))
   }
 
   listen(){
