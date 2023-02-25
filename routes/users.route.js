@@ -10,19 +10,6 @@ router.get('/',findAllUsers)
 
 router.get('/:id', userIdExist ,findUser)
 
-router.post('/',
-[
-  check('name', 'dato nombre es oblogatorio').not().isEmpty(),
-  check('email', 'dato email es obligatorio').not().isEmpty(),
-  check('email', 'formato incorrecto').isEmail(),
-  check('password', 'dato password es obligatorio').not().isEmpty(),
-  check('role', 'dato rol es obligatorio').not().isEmpty(),
-  validData,
-  validRole,
-],
-createUser
-)
-
 router.patch('/:id',
 [
   check('name', 'dato nombre es oblogatorio').not().isEmpty(),

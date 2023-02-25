@@ -6,6 +6,7 @@ const { AppError } = require('../utils/appError')
 const { usersRouter } = require('../routes/users.route')
 const initModel = require('./init.model')
 const { repairsRouter } = require('../routes/repairs.route')
+const { routerAuth } = require('../routes/auth.routes')
 
 class Server {
   constructor(){
@@ -14,7 +15,8 @@ class Server {
 
     this.path = {
       users:'/api/v1/users',
-      repairs:'/api/v1/repairs'
+      repairs:'/api/v1/repairs',
+      auth:'/api/v1/auth'
     }
 
     
@@ -26,6 +28,7 @@ class Server {
   routes(){
     this.app.use(this.path.users, usersRouter)
     this.app.use(this.path.repairs, repairsRouter)
+    this.app.use(this.path.auth, routerAuth)
 
     this.app.all('*', (req, res, next) =>{
       return next(
