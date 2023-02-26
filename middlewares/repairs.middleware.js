@@ -1,4 +1,5 @@
 const repairs = require("../models/repairs.model");
+const Users = require("../models/Users.model");
 const { AppError } = require("../utils/appError");
 const { catchAsync } = require("../utils/catchAsync");
 
@@ -20,6 +21,20 @@ const repairIdExist = catchAsync(async(req, res, next) =>{
   next()
 })
 
+const routesEmploye = catchAsync(async(req, res, next) => {
+  const user = await Users.findOne({
+    where:{
+      Id: req.decoded.id,
+      role: 'employe'
+    }
+  })
+
+  if(!user) return next(new AppError('logueate como usuario con rol enploye para ver esta informacion'))
+
+
+  next()
+})
+
 module.exports = {
-  repairIdExist
+  repairIdExist, routesEmploye
 }

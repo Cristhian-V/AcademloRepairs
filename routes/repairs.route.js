@@ -1,15 +1,18 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 const { findAllRepairs, findRepair, crateCite, updateStatus, deleteRepair } = require("../controllers/repairs.controller");
-const { repairIdExist } = require("../middlewares/repairs.middleware");
+const { protec } = require("../middlewares/auth.middleware");
+const { repairIdExist, routesEmploye } = require("../middlewares/repairs.middleware");
 const { userIdExist } = require("../middlewares/users.middleware");
 const { validData } = require("../middlewares/validData.middleware");
 
 const router = Router()
 
-router.get('/', findAllRepairs)
+//rutas protejidas por TOKEN y valido el Id desde el token para verificar que el id del usuario que solicita sea de un empleado con routesEmploye
 
-router.get('/:id', repairIdExist, findRepair)
+router.get('/', protec, routesEmploye, findAllRepairs)
+
+router.get('/:id', repairIdExist,protec, routesEmploye, findRepair)
 
 router.post('/',
 [
@@ -24,9 +27,9 @@ router.post('/',
 crateCite
 )
 
-router.patch('/:id', repairIdExist, updateStatus)
+router.patch('/:id', repairIdExist, protec, routesEmploye, updateStatus)
 
-router.delete('/:id', repairIdExist, deleteRepair)
+router.delete('/:id', repairIdExist, protec, routesEmploye, deleteRepair)
 
 module.exports = {
   repairsRouter: router

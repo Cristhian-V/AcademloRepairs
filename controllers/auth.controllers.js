@@ -5,9 +5,7 @@ const generateJWT = require("../utils/jwt");
 
 
 const looginOk = catchAsync( async( req, res, next) => {
-
-  const token = await generateJWT(req.userDB.id)
-
+  const token = await generateJWT(req.userDB.Id)
   return res.status(200).json(token)
 })
 
@@ -29,7 +27,16 @@ const createUser = catchAsync(async(req,res,next) =>{
 })
 
 const updatePassword = catchAsync(async(req, res, next)=>{
-  
+  const {newPassword} = req.body
+  const {userDB} = req
+  const salt = await bcrypt.genSalt(10)
+  const encriptNewPass = await bcrypt.hash(newPassword, salt)
+
+  await userDB.update({
+    password: encriptNewPass
+  })
+
+  return res.status(200).json('Se actulizo la contraseña con exito')
 })
 
 module.exports = {

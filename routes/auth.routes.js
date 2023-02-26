@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 const { looginOk, createUser, updatePassword } = require("../controllers/auth.controllers");
-const { validUserData, validUserExist } = require("../middlewares/auth.middleware");
+const { validUserData, validUserExist, protec } = require("../middlewares/auth.middleware");
 const { validRole } = require("../middlewares/users.middleware");
 const { validData } = require("../middlewares/validData.middleware");
 
@@ -32,7 +32,7 @@ router.post('/',
 createUser
 )
 
-router.patch('/password',
+router.patch('/password/:id',
 [
   check('email', 'dato email es obligatorio').not().isEmpty(),
   check('email', 'formato incorrecto').isEmail(),
@@ -40,6 +40,7 @@ router.patch('/password',
   check('newPassword', 'dato password es obligatorio').not().isEmpty(),
   check('newPasswordRep', 'dato password es obligatorio').not().isEmpty(),
   validData,
+  protec,
   validUserData,
 ],
 updatePassword

@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const { check } = require('express-validator')
 const { findAllUsers, findUser, createUser, updateUser, deleteUser } = require('../controllers/users.controller')
+const { protec } = require('../middlewares/auth.middleware')
 const { userIdExist, validRole } = require('../middlewares/users.middleware')
 const { validData } = require('../middlewares/validData.middleware')
 
@@ -17,11 +18,12 @@ router.patch('/:id',
   check('email', 'formato incorrecto').isEmail(),
   validData,
   userIdExist,
+  protec,
 ],
 updateUser
 )
 
-router.delete('/:id', userIdExist, deleteUser)
+router.delete('/:id', userIdExist, protec, deleteUser)
 
 module.exports = {
   usersRouter: router
